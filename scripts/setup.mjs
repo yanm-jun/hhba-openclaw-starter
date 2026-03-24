@@ -117,17 +117,31 @@ function updateEnvFile(filePath, updates) {
 }
 
 function run(command, args, options = {}) {
-  const resolvedCommand =
-    process.platform === "win32" && command === "npm" ? "npm.cmd" : command;
-  const result = spawnSync(resolvedCommand, args, {
+  let resolvedCommand = command;
+  let resolvedArgs = args;
+
+  if (command === "npm" && process.env.npm_execpath) {
+    resolvedCommand = process.execPath;
+    resolvedArgs = [process.env.npm_execpath, ...args];
+  } else if (process.platform === "win32" && command === "npm") {
+    resolvedCommand = "npm.cmd";
+  }
+
+  const result = spawnSync(resolvedCommand, resolvedArgs, {
     stdio: "inherit",
     cwd: rootDir,
     shell: false,
     ...options
   });
 
+  if (result.error) {
+    throw new Error(`${resolvedCommand} ${resolvedArgs.join(" ")} failed: ${result.error.message}`);
+  }
+
   if (result.status !== 0) {
-    throw new Error(`${resolvedCommand} ${args.join(" ")} failed with code ${result.status ?? "unknown"}`);
+    throw new Error(
+      `${resolvedCommand} ${resolvedArgs.join(" ")} failed with code ${result.status ?? "unknown"}${result.signal ? ` (signal: ${result.signal})` : ""}`
+    );
   }
 }
 
