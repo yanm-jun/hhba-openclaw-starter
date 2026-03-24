@@ -6,15 +6,21 @@ param(
   [string]$ApiToken,
 
   [string]$OpenClawConfig,
-  [string]$TelegramBotToken
+  [string]$TelegramBotToken,
+  [string]$InstallDir = (Join-Path $HOME ".hhba-openclaw-starter")
 )
 
 $ErrorActionPreference = "Stop"
+$OutputEncoding = [System.Text.Encoding]::UTF8
+[Console]::OutputEncoding = [System.Text.Encoding]::UTF8
+chcp 65001 > $null
 
 $stamp = Get-Date -Format "yyyyMMddHHmmss"
 $tempRoot = Join-Path $env:TEMP "hhba-openclaw-starter-$stamp"
 $zipPath = Join-Path $env:TEMP "hhba-openclaw-starter-$stamp.zip"
 $sourceUrl = "https://github.com/yanm-jun/hhba-openclaw-starter/archive/refs/heads/main.zip"
+$expandedRoot = Join-Path $tempRoot "hhba-openclaw-starter-main"
+$installRoot = [System.IO.Path]::GetFullPath($InstallDir)
 
 Write-Host "正在下载 HHBA starter..."
 Invoke-WebRequest -Uri $sourceUrl -OutFile $zipPath
@@ -22,7 +28,14 @@ Invoke-WebRequest -Uri $sourceUrl -OutFile $zipPath
 Write-Host "正在解压..."
 Expand-Archive -Path $zipPath -DestinationPath $tempRoot -Force
 
-$projectRoot = Join-Path $tempRoot "hhba-openclaw-starter-main"
+if (Test-Path $installRoot) {
+  Remove-Item -Recurse -Force $installRoot
+}
+
+New-Item -ItemType Directory -Force -Path (Split-Path -Parent $installRoot) | Out-Null
+Move-Item -Path $expandedRoot -Destination $installRoot
+
+$projectRoot = $installRoot
 $setupArgs = @(
   "run", "setup", "--",
   "--base-url", $BaseUrl,
@@ -47,4 +60,5 @@ try {
 
 Write-Host ""
 Write-Host "完成。"
+Write-Host "安装目录: $installRoot"
 Write-Host "如果 OpenClaw 已经在本机，下一步直接重启 OpenClaw 即可。"

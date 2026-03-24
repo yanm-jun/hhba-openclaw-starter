@@ -64,6 +64,11 @@ macOS / Linux:
 bash <(curl -fsSL https://raw.githubusercontent.com/yanm-jun/hhba-openclaw-starter/main/scripts/bootstrap.sh) --base-url https://YOUR-HHBA-API --api-token YOUR_HHBA_TOKEN
 ```
 
+bootstrap 默认会把 starter 安装到固定目录，而不是临时目录：
+
+- Windows: `%USERPROFILE%\\.hhba-openclaw-starter`
+- macOS / Linux: `~/.hhba-openclaw-starter`
+
 如果它的 `openclaw.json` 不在默认位置，再补一个配置路径：
 
 ```bash

@@ -5,6 +5,7 @@ BASE_URL=""
 API_TOKEN=""
 OPENCLAW_CONFIG=""
 TELEGRAM_BOT_TOKEN=""
+INSTALL_DIR="${HOME}/.hhba-openclaw-starter"
 
 while [[ $# -gt 0 ]]; do
   case "$1" in
@@ -22,6 +23,10 @@ while [[ $# -gt 0 ]]; do
       ;;
     --telegram-bot-token)
       TELEGRAM_BOT_TOKEN="${2:-}"
+      shift 2
+      ;;
+    --install-dir)
+      INSTALL_DIR="${2:-}"
       shift 2
       ;;
     *)
@@ -48,7 +53,11 @@ echo "正在解压..."
 mkdir -p "$TEMP_ROOT"
 unzip -q "$ZIP_PATH" -d "$TEMP_ROOT"
 
-PROJECT_ROOT="$TEMP_ROOT/hhba-openclaw-starter-main"
+rm -rf "$INSTALL_DIR"
+mkdir -p "$(dirname "$INSTALL_DIR")"
+mv "$TEMP_ROOT/hhba-openclaw-starter-main" "$INSTALL_DIR"
+
+PROJECT_ROOT="$INSTALL_DIR"
 cd "$PROJECT_ROOT"
 
 ARGS=(
@@ -68,4 +77,5 @@ npm "${ARGS[@]}"
 
 echo
 echo "完成。"
+echo "安装目录: $INSTALL_DIR"
 echo "如果 OpenClaw 已经在本机，下一步直接重启 OpenClaw 即可。"
