@@ -3,6 +3,9 @@
   "version": "0.1.0",
   "private": true,
   "type": "module",
+  "bin": {
+    "hhba-openclaw-setup": "./bin/hhba-openclaw-setup.mjs"
+  },
   "scripts": {
     "setup": "node ./scripts/setup.mjs",
     "install:plugin": "npm install --prefix ./plugins/hhba-openclaw",

@@ -4,6 +4,22 @@ import { fileURLToPath } from "node:url";
 import { spawnSync } from "node:child_process";
 
 const rootDir = resolve(dirname(fileURLToPath(import.meta.url)), "..");
+const HELP_TEXT = `
+HHBA OpenClaw Setup
+
+Usage:
+  npm run setup -- --base-url <HHBA_BASE_URL> --api-token <HHBA_API_TOKEN>
+  hhba-openclaw-setup --base-url <HHBA_BASE_URL> --api-token <HHBA_API_TOKEN>
+
+Options:
+  --base-url <url>           HHBA Task API base URL
+  --api-token <token>        HHBA API bearer token
+  --openclaw-config <path>   Absolute path to openclaw.json
+  --telegram-bot-token <v>   Optional Telegram bot token
+  --skip-install             Skip npm install for the plugin folder
+  --no-merge                 Only render config, do not write openclaw.json
+  --help                     Show this help
+`;
 
 function parseArgs(argv) {
   const options = {};
@@ -126,6 +142,11 @@ function findOpenClawConfig() {
 }
 
 const args = parseArgs(process.argv.slice(2));
+if (args.help) {
+  console.log(HELP_TEXT.trim());
+  process.exit(0);
+}
+
 const envFile = resolve(rootDir, ".env");
 const envExample = resolve(rootDir, ".env.example");
 

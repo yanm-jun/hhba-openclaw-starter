@@ -38,6 +38,12 @@
 npm run setup -- --base-url https://YOUR-HHBA-API --api-token YOUR_HHBA_TOKEN
 ```
 
+如果不想先 clone 仓库，也可以直接远程运行：
+
+```bash
+npx --yes --package github:yanm-jun/hhba-openclaw-starter hhba-openclaw-setup -- --base-url https://YOUR-HHBA-API --api-token YOUR_HHBA_TOKEN
+```
+
 如果它的 `openclaw.json` 不在默认位置，再补一个配置路径：
 
 ```bash
