@@ -1,0 +1,4 @@
+.env
+generated/
+plugins/hhba-openclaw/node_modules/
+plugins/hhba-openclaw/package-lock.json
