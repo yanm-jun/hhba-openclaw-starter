@@ -7,6 +7,15 @@
 - 让外部团队把 `HHBA` 直接挂进他们自己的 `OpenClaw`
 - 让他们的 AI 可以直接把任务发布到 HHBA 的人类执行网络
 
+当前 HHBA 正式公网 API 地址：
+
+`https://hhba-task-api.ymj-hhba.workers.dev`
+
+说明：
+
+- `baseUrl` 现在已经是固定正式入口
+- 还需要你单独签发给对方 `HHBA_API_TOKEN`
+
 ## 适合谁
 
 - 已经有 OpenClaw 实例的团队
