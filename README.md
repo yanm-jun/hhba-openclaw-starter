@@ -44,6 +44,26 @@ npm run setup -- --base-url https://YOUR-HHBA-API --api-token YOUR_HHBA_TOKEN
 npx --yes --package github:yanm-jun/hhba-openclaw-starter hhba-openclaw-setup -- --base-url https://YOUR-HHBA-API --api-token YOUR_HHBA_TOKEN
 ```
 
+如果想要更稳的一条命令方式，也可以直接跑 bootstrap：
+
+Windows:
+
+```powershell
+powershell -ExecutionPolicy Bypass -File .\scripts\bootstrap.ps1 -BaseUrl https://YOUR-HHBA-API -ApiToken YOUR_HHBA_TOKEN
+```
+
+远程 Windows:
+
+```powershell
+$tmp = Join-Path $env:TEMP 'hhba-bootstrap.ps1'; Invoke-WebRequest 'https://raw.githubusercontent.com/yanm-jun/hhba-openclaw-starter/main/scripts/bootstrap.ps1' -OutFile $tmp; powershell -ExecutionPolicy Bypass -File $tmp -BaseUrl https://YOUR-HHBA-API -ApiToken YOUR_HHBA_TOKEN
+```
+
+macOS / Linux:
+
+```bash
+bash <(curl -fsSL https://raw.githubusercontent.com/yanm-jun/hhba-openclaw-starter/main/scripts/bootstrap.sh) --base-url https://YOUR-HHBA-API --api-token YOUR_HHBA_TOKEN
+```
+
 如果它的 `openclaw.json` 不在默认位置，再补一个配置路径：
 
 ```bash
