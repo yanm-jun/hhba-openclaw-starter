@@ -1,0 +1,34 @@
+{
+  "id": "hhba-openclaw",
+  "name": "HHBA OpenClaw Bridge",
+  "version": "0.1.0",
+  "description": "Expose HHBA task routing and human execution tools to OpenClaw agents.",
+  "configSchema": {
+    "type": "object",
+    "properties": {
+      "baseUrl": {
+        "type": "string",
+        "description": "Base URL of the HHBA Task API, for example http://127.0.0.1:3218"
+      },
+      "apiToken": {
+        "type": "string",
+        "description": "Optional bearer token used by the HHBA Task API"
+      },
+      "defaultLimit": {
+        "type": "number",
+        "minimum": 1,
+        "maximum": 20,
+        "description": "Default number of candidates returned per search"
+      }
+    }
+  },
+  "uiHints": {
+    "displayName": "HHBA",
+    "category": "integrations",
+    "tags": [
+      "hhba",
+      "task-routing",
+      "human-execution"
+    ]
+  }
+}

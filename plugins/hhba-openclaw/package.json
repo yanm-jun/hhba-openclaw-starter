@@ -1,0 +1,15 @@
+{
+  "name": "hhba-openclaw-plugin",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "OpenClaw plugin that exposes HHBA human-execution tools.",
+  "dependencies": {
+    "openclaw": "^2026.3.22"
+  },
+  "openclaw": {
+    "extensions": [
+      "./index.js"
+    ]
+  }
+}

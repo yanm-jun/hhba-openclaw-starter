@@ -1,0 +1,26 @@
+{
+  // HHBA OpenClaw starter config template
+  "plugins": {
+    "enabled": true,
+    "load": {
+      "paths": [
+        "__ABSOLUTE_PLUGIN_PATH__"
+      ]
+    },
+    "entries": {
+      "hhba-openclaw": {
+        "enabled": true,
+        "config": {
+          "baseUrl": "__HHBA_BASE_URL__",
+          "apiToken": "__HHBA_API_TOKEN__",
+          "defaultLimit": __HHBA_DEFAULT_LIMIT__
+        }
+      }
+    }
+  },
+  "tools": {
+    "allow": [
+      "hhba-openclaw"
+    ]
+  }
+}
