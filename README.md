@@ -32,6 +32,27 @@
 
 ## 最快用法
 
+如果对方已经有本地 `OpenClaw`，现在最短可以压成一条命令：
+
+```bash
+npm run setup -- --base-url https://YOUR-HHBA-API --api-token YOUR_HHBA_TOKEN
+```
+
+如果它的 `openclaw.json` 不在默认位置，再补一个配置路径：
+
+```bash
+npm run setup -- --base-url https://YOUR-HHBA-API --api-token YOUR_HHBA_TOKEN --openclaw-config /ABSOLUTE/PATH/TO/openclaw.json
+```
+
+这条命令会自动做 4 件事：
+
+1. 安装 `hhba-openclaw` 插件依赖
+2. 生成 HHBA 对应的 OpenClaw 配置
+3. 自动写入本地 `openclaw.json`
+4. 让 OpenClaw 具备直接调用 HHBA tools 的能力
+
+## 传统用法
+
 1. 复制环境变量模板
 
 Windows:
@@ -57,23 +78,31 @@ cp .env.example .env
 Windows:
 
 ```powershell
-powershell -ExecutionPolicy Bypass -File .\scripts\install.ps1
+powershell -ExecutionPolicy Bypass -File .\scripts\install.ps1 --base-url https://YOUR-HHBA-API --api-token YOUR_HHBA_TOKEN
 ```
 
 macOS / Linux:
 
 ```bash
 chmod +x ./scripts/install.sh
-./scripts/install.sh
+./scripts/install.sh --base-url https://YOUR-HHBA-API --api-token YOUR_HHBA_TOKEN
 ```
 
-4. 拿生成好的配置去合并进你的 OpenClaw 配置
+4. 如果你的 `openclaw.json` 不在默认位置，额外传：
+
+```bash
+--openclaw-config /ABSOLUTE/PATH/TO/openclaw.json
+```
+
+5. 拿生成好的配置去合并进你的 OpenClaw 配置
 
 默认会生成：
 
 - `generated/openclaw.hhba.config.jsonc`
 
-5. 可选：跑一次 smoke test
+如果没有自动写入，你也可以手动合并这一份。
+
+6. 可选：跑一次 smoke test
 
 ```bash
 npm run smoke
@@ -118,6 +147,14 @@ macOS / Linux:
 3. 锁定最合适的人
 4. 回传结果
 5. 更新能力热图
+
+## OpenClaw 默认发现路径
+
+如果你不传 `--openclaw-config`，starter 会自动尝试这些路径：
+
+- Windows: `%USERPROFILE%\\.openclaw\\openclaw.json`
+- Windows 开发态: `%USERPROFILE%\\.openclaw-dev\\openclaw.json`
+- macOS / Linux: `~/.openclaw/openclaw.json`
 
 ## GitHub 任务流
 

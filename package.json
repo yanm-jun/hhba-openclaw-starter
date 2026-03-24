@@ -4,7 +4,9 @@
   "private": true,
   "type": "module",
   "scripts": {
+    "setup": "node ./scripts/setup.mjs",
     "install:plugin": "npm install --prefix ./plugins/hhba-openclaw",
+    "apply-config": "node ./scripts/apply-openclaw-config.mjs",
     "render-config": "node ./scripts/render-config.mjs",
     "render-config:check": "node ./scripts/render-config.mjs --check",
     "smoke": "node ./scripts/smoke-check.mjs"
