@@ -14,7 +14,7 @@
 说明：
 
 - `baseUrl` 现在已经是固定正式入口
-- 还需要你单独签发给对方 `HHBA_API_TOKEN`
+- 还需要你单独签发给对方 `HHBA client token`
 
 ## 适合谁
 
@@ -44,13 +44,13 @@
 如果对方已经有本地 `OpenClaw`，现在最短可以压成一条命令：
 
 ```bash
-npm run setup -- --base-url https://YOUR-HHBA-API --api-token YOUR_HHBA_TOKEN
+npm run setup -- --base-url https://YOUR-HHBA-API --api-token YOUR_HHBA_CLIENT_TOKEN
 ```
 
 如果不想先 clone 仓库，也可以直接远程运行：
 
 ```bash
-npx --yes --package github:yanm-jun/hhba-openclaw-starter hhba-openclaw-setup -- --base-url https://YOUR-HHBA-API --api-token YOUR_HHBA_TOKEN
+npx --yes --package github:yanm-jun/hhba-openclaw-starter hhba-openclaw-setup -- --base-url https://YOUR-HHBA-API --api-token YOUR_HHBA_CLIENT_TOKEN
 ```
 
 如果想要更稳的一条命令方式，也可以直接跑 bootstrap：
@@ -58,19 +58,19 @@ npx --yes --package github:yanm-jun/hhba-openclaw-starter hhba-openclaw-setup --
 Windows:
 
 ```powershell
-powershell -ExecutionPolicy Bypass -File .\scripts\bootstrap.ps1 -BaseUrl https://YOUR-HHBA-API -ApiToken YOUR_HHBA_TOKEN
+powershell -ExecutionPolicy Bypass -File .\scripts\bootstrap.ps1 -BaseUrl https://YOUR-HHBA-API -ApiToken YOUR_HHBA_CLIENT_TOKEN
 ```
 
 远程 Windows:
 
 ```powershell
-$tmp = Join-Path $env:TEMP 'hhba-bootstrap.ps1'; Invoke-WebRequest 'https://raw.githubusercontent.com/yanm-jun/hhba-openclaw-starter/main/scripts/bootstrap.ps1' -OutFile $tmp; powershell -ExecutionPolicy Bypass -File $tmp -BaseUrl https://YOUR-HHBA-API -ApiToken YOUR_HHBA_TOKEN
+$tmp = Join-Path $env:TEMP 'hhba-bootstrap.ps1'; Invoke-WebRequest 'https://raw.githubusercontent.com/yanm-jun/hhba-openclaw-starter/main/scripts/bootstrap.ps1' -OutFile $tmp; powershell -ExecutionPolicy Bypass -File $tmp -BaseUrl https://YOUR-HHBA-API -ApiToken YOUR_HHBA_CLIENT_TOKEN
 ```
 
 macOS / Linux:
 
 ```bash
-bash <(curl -fsSL https://raw.githubusercontent.com/yanm-jun/hhba-openclaw-starter/main/scripts/bootstrap.sh) --base-url https://YOUR-HHBA-API --api-token YOUR_HHBA_TOKEN
+bash <(curl -fsSL https://raw.githubusercontent.com/yanm-jun/hhba-openclaw-starter/main/scripts/bootstrap.sh) --base-url https://YOUR-HHBA-API --api-token YOUR_HHBA_CLIENT_TOKEN
 ```
 
 bootstrap 默认会把 starter 安装到固定目录，而不是临时目录：
@@ -81,7 +81,7 @@ bootstrap 默认会把 starter 安装到固定目录，而不是临时目录：
 如果它的 `openclaw.json` 不在默认位置，再补一个配置路径：
 
 ```bash
-npm run setup -- --base-url https://YOUR-HHBA-API --api-token YOUR_HHBA_TOKEN --openclaw-config /ABSOLUTE/PATH/TO/openclaw.json
+npm run setup -- --base-url https://YOUR-HHBA-API --api-token YOUR_HHBA_CLIENT_TOKEN --openclaw-config /ABSOLUTE/PATH/TO/openclaw.json
 ```
 
 这条命令会自动做 4 件事：
@@ -118,14 +118,14 @@ cp .env.example .env
 Windows:
 
 ```powershell
-powershell -ExecutionPolicy Bypass -File .\scripts\install.ps1 --base-url https://YOUR-HHBA-API --api-token YOUR_HHBA_TOKEN
+powershell -ExecutionPolicy Bypass -File .\scripts\install.ps1 --base-url https://YOUR-HHBA-API --api-token YOUR_HHBA_CLIENT_TOKEN
 ```
 
 macOS / Linux:
 
 ```bash
 chmod +x ./scripts/install.sh
-./scripts/install.sh --base-url https://YOUR-HHBA-API --api-token YOUR_HHBA_TOKEN
+./scripts/install.sh --base-url https://YOUR-HHBA-API --api-token YOUR_HHBA_CLIENT_TOKEN
 ```
 
 4. 如果你的 `openclaw.json` 不在默认位置，额外传：
