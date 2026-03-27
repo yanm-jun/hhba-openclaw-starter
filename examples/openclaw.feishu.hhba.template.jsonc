@@ -1,5 +1,5 @@
 {
-  // HHBA OpenClaw starter config template
+  // Example: Feishu / Lark -> OpenClaw -> HHBA
   "plugins": {
     "enabled": true,
     "load": {
@@ -11,9 +11,9 @@
       "hhba-openclaw": {
         "enabled": true,
         "config": {
-          "baseUrl": "__HHBA_BASE_URL__",
-          "apiToken": "__HHBA_API_TOKEN__",
-          "defaultLimit": __HHBA_DEFAULT_LIMIT__
+          "baseUrl": "https://api.hhba.com.cn",
+          "apiToken": "__HHBA_CLIENT_TOKEN__",
+          "defaultLimit": 5
         }
       }
     }
@@ -23,11 +23,9 @@
       "hhba-openclaw"
     ]
   },
-  // Optional Feishu / Lark channel
-  // Fill these only when you want OpenClaw to receive tasks from Feishu.
   "channels": {
     "feishu": {
-      "enabled": false,
+      "enabled": true,
       "dmPolicy": "pairing",
       "accounts": {
         "main": {
