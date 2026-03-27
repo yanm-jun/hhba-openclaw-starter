@@ -9,7 +9,7 @@
 
 当前 HHBA 正式公网 API 地址：
 
-`https://hhba-task-api.ymj-hhba.workers.dev`
+`https://api.hhba.com.cn`
 
 说明：
 
