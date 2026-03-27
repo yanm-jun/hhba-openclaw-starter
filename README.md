@@ -15,7 +15,6 @@
 
 - `baseUrl` 现在已经是固定正式入口
 - 还需要你单独签发给对方 `HHBA client token`
-- 如果你要在飞书里一句话把任务送进 HHBA，再额外填飞书通道参数即可
 
 ## 适合谁
 
@@ -91,45 +90,6 @@ npm run setup -- --base-url https://YOUR-HHBA-API --api-token YOUR_HHBA_CLIENT_T
 2. 生成 HHBA 对应的 OpenClaw 配置
 3. 自动写入本地 `openclaw.json`
 4. 让 OpenClaw 具备直接调用 HHBA tools 的能力
-
-## 飞书一句话派单
-
-如果你希望：
-
-- 在飞书私聊里说一句话发任务
-- 或者在飞书群里 `@OpenClaw` 发任务
-- 然后任务直接进入 HHBA
-
-那就在 `.env` 里额外填这些：
-
-- `FEISHU_APP_ID`
-- `FEISHU_APP_SECRET`
-- `FEISHU_DM_POLICY`
-- `FEISHU_REQUIRE_MENTION`
-- `FEISHU_ACCOUNT_NAME`
-- `FEISHU_DOMAIN`（可选，Lark/多域名环境再填）
-
-填完之后重新运行：
-
-```bash
-npm run render-config
-```
-
-生成的 `generated/openclaw.hhba.config.jsonc` 会自动包含：
-
-- `channels.feishu`
-- `hhba-openclaw` 插件
-- `tools.allow = ["hhba-openclaw"]`
-
-也就是说：
-
-`飞书消息 -> OpenClaw -> HHBA 发布任务 -> 人类接单 -> 结果回流 OpenClaw`
-
-如果你后面要切成 webhook 模式，而不是默认的官方推荐 websocket / pairing 模式，再补：
-
-- `FEISHU_CONNECTION_MODE=webhook`
-- `FEISHU_VERIFICATION_TOKEN`
-- `FEISHU_ENCRYPT_KEY`
 
 ## 传统用法
 

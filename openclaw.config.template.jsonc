@@ -22,27 +22,5 @@
     "allow": [
       "hhba-openclaw"
     ]
-  },
-  // Optional Feishu / Lark channel
-  // Fill these only when you want OpenClaw to receive tasks from Feishu.
-  "channels": {
-    "feishu": {
-      "enabled": false,
-      "dmPolicy": "pairing",
-      "accounts": {
-        "main": {
-          "appId": "__FEISHU_APP_ID__",
-          "appSecret": "__FEISHU_APP_SECRET__",
-          "name": "HHBA OpenClaw",
-          "typingIndicator": true,
-          "resolveSenderNames": true
-        }
-      },
-      "groups": {
-        "*": {
-          "requireMention": true
-        }
-      }
-    }
   }
 }
