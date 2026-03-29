@@ -16,6 +16,25 @@
 - `baseUrl` 现在已经是固定正式入口
 - 还需要你单独签发给对方 `HHBA client token`
 
+## 直接给 OpenClaw 的入口
+
+如果你想把这件事压成“复制一个 GitHub 链接，然后让 OpenClaw 自己部署”，现在最推荐的入口就是：
+
+- 仓库链接：
+  [https://github.com/yanm-jun/hhba-openclaw-starter](https://github.com/yanm-jun/hhba-openclaw-starter)
+- 可直接复制给 OpenClaw 的提示词：
+  [OPENCLAW_DEPLOY_PROMPT.md](./OPENCLAW_DEPLOY_PROMPT.md)
+
+最短使用方式：
+
+1. 把上面的 GitHub 链接发给对方
+2. 再把 `OPENCLAW_DEPLOY_PROMPT.md` 里的提示词发给 OpenClaw
+3. 只需要补两个参数：
+   - `HHBA_BASE_URL`
+   - `HHBA_API_TOKEN`
+
+这样对方不需要自己研究怎么接，也不需要先手动 clone 再看文档。
+
 ## 适合谁
 
 - 已经有 OpenClaw 实例的团队
@@ -90,6 +109,22 @@ npm run setup -- --base-url https://YOUR-HHBA-API --api-token YOUR_HHBA_CLIENT_T
 2. 生成 HHBA 对应的 OpenClaw 配置
 3. 自动写入本地 `openclaw.json`
 4. 让 OpenClaw 具备直接调用 HHBA tools 的能力
+
+## GitHub 链接的推荐话术
+
+如果你在微信、飞书、Telegram 或邮件里发给别人，建议直接发这句：
+
+```text
+把这个 GitHub starter 部署到你的 OpenClaw：
+https://github.com/yanm-jun/hhba-openclaw-starter
+
+部署时按仓库里的 OPENCLAW_DEPLOY_PROMPT.md 执行。
+参数是：
+- HHBA_BASE_URL=https://api.hhba.com.cn
+- HHBA_API_TOKEN=<我单独发你的 token>
+```
+
+如果对方直接把这句再转给 OpenClaw，一般就够了。
 
 ## 传统用法
 
