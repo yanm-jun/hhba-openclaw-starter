@@ -1,5 +1,5 @@
-import { existsSync, mkdirSync, readFileSync, writeFileSync } from "node:fs";
-import { dirname, resolve } from "node:path";
+import { existsSync, mkdirSync, readFileSync, readdirSync, writeFileSync } from "node:fs";
+import { basename, dirname, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 import { spawnSync } from "node:child_process";
 
@@ -14,7 +14,7 @@ Usage:
 Options:
   --base-url <url>           HHBA Task API base URL
   --api-token <token>        HHBA API bearer token
-  --openclaw-config <path>   Absolute path to openclaw.json
+  --openclaw-config <path>   Absolute path to openclaw.json (overrides auto-discovery)
   --telegram-bot-token <v>   Optional Telegram bot token
   --skip-install             Skip npm install for the plugin folder
   --no-merge                 Only render config, do not write openclaw.json
@@ -147,12 +147,24 @@ function run(command, args, options = {}) {
 
 function findOpenClawConfig() {
   const homeDir = process.env.USERPROFILE || process.env.HOME || "";
-  const candidates = [
+  const preferredProfiles = [
+    ...(existsSync(homeDir)
+      ? readdirSync(homeDir, { withFileTypes: true })
+        .filter((entry) => entry.isDirectory() && entry.name.startsWith(".openclaw-"))
+        .map((entry) => resolve(homeDir, entry.name, "openclaw.json"))
+        .sort((left, right) => {
+          const leftName = basename(dirname(left));
+          const rightName = basename(dirname(right));
+          const leftScore = leftName.includes("hhba") ? 0 : (leftName.includes("dev") ? 2 : 1);
+          const rightScore = rightName.includes("hhba") ? 0 : (rightName.includes("dev") ? 2 : 1);
+          return leftScore - rightScore || left.localeCompare(right);
+        })
+      : []),
     resolve(homeDir, ".openclaw", "openclaw.json"),
     resolve(homeDir, ".openclaw-dev", "openclaw.json")
-  ].filter(Boolean);
+  ];
 
-  return candidates.find((candidate) => existsSync(candidate)) || "";
+  return preferredProfiles.find((candidate) => existsSync(candidate)) || "";
 }
 
 const args = parseArgs(process.argv.slice(2));
@@ -185,12 +197,15 @@ const env = {
   ...process.env
 };
 
-const explicitConfigPath = String(args["openclaw-config"] || env.OPENCLAW_CONFIG_PATH || "").trim();
+const explicitConfigPath = String(args["openclaw-config"] || "").trim();
 const discoveredConfigPath = findOpenClawConfig();
+const envConfigPath = String(env.OPENCLAW_CONFIG_PATH || "").trim();
 const targetConfigPath = explicitConfigPath
   ? resolve(explicitConfigPath)
   : discoveredConfigPath
     ? resolve(discoveredConfigPath)
+    : envConfigPath
+      ? resolve(envConfigPath)
     : "";
 
 if (!args["skip-install"]) {

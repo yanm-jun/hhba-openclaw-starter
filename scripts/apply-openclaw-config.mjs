@@ -43,6 +43,14 @@ function uniqueArray(values) {
   return [...new Set(values.filter(Boolean))];
 }
 
+function normalizePath(value) {
+  return String(value || "").replace(/\\/g, "/").toLowerCase();
+}
+
+function isHhbaPluginPath(value) {
+  return /hhba-openclaw(?:-plugin)?/.test(normalizePath(value));
+}
+
 function mergeObjects(base, incoming) {
   if (!incoming || typeof incoming !== "object" || Array.isArray(incoming)) {
     return incoming;
@@ -93,6 +101,17 @@ const generatedConfig = readJsonc(generatedPath);
 const mergedConfig = mergeObjects(targetConfig, generatedConfig);
 
 mergedConfig.plugins = mergedConfig.plugins || {};
+const generatedPluginPaths = Array.isArray(generatedConfig?.plugins?.load?.paths)
+  ? generatedConfig.plugins.load.paths
+  : [];
+const existingPluginPaths = Array.isArray(targetConfig?.plugins?.load?.paths)
+  ? targetConfig.plugins.load.paths
+  : [];
+mergedConfig.plugins.load = mergedConfig.plugins.load || {};
+mergedConfig.plugins.load.paths = uniqueArray([
+  ...generatedPluginPaths,
+  ...existingPluginPaths.filter((path) => !isHhbaPluginPath(path))
+]);
 mergedConfig.plugins.allow = uniqueArray([
   ...(Array.isArray(mergedConfig.plugins.allow) ? mergedConfig.plugins.allow : []),
   "hhba-openclaw"
