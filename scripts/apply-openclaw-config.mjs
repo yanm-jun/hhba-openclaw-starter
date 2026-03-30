@@ -62,7 +62,7 @@ function mergeObjects(base, incoming) {
     const current = next[key];
 
     if (Array.isArray(value)) {
-      next[key] = uniqueArray([...(Array.isArray(current) ? current : []), ...value]);
+      next[key] = [...value];
       continue;
     }
 

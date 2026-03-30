@@ -1,10 +1,9 @@
 param(
-  [Parameter(Mandatory = $true)]
   [string]$BaseUrl,
 
-  [Parameter(Mandatory = $true)]
   [string]$ApiToken,
 
+  [string]$DeployLink,
   [string]$OpenClawConfig,
   [string]$TelegramBotToken,
   [string]$InstallDir = (Join-Path $HOME ".hhba-openclaw-starter")
@@ -22,6 +21,10 @@ $sourceUrl = "https://github.com/yanm-jun/hhba-openclaw-starter/archive/refs/hea
 $expandedRoot = Join-Path $tempRoot "hhba-openclaw-starter-main"
 $installRoot = [System.IO.Path]::GetFullPath($InstallDir)
 
+if (-not $DeployLink -and ([string]::IsNullOrWhiteSpace($BaseUrl) -or [string]::IsNullOrWhiteSpace($ApiToken))) {
+  throw "Usage: bootstrap.ps1 -DeployLink <HHBA_DEPLOY_LINK> OR -BaseUrl <HHBA_BASE_URL> -ApiToken <HHBA_API_TOKEN>"
+}
+
 Write-Host "正在下载 HHBA starter..."
 Invoke-WebRequest -Uri $sourceUrl -OutFile $zipPath
 
@@ -36,11 +39,13 @@ New-Item -ItemType Directory -Force -Path (Split-Path -Parent $installRoot) | Ou
 Move-Item -Path $expandedRoot -Destination $installRoot
 
 $projectRoot = $installRoot
-$setupArgs = @(
-  "run", "setup", "--",
-  "--base-url", $BaseUrl,
-  "--api-token", $ApiToken
-)
+$setupArgs = @("run", "setup", "--")
+
+if ($DeployLink) {
+  $setupArgs += @("--deploy-link", $DeployLink)
+} else {
+  $setupArgs += @("--base-url", $BaseUrl, "--api-token", $ApiToken)
+}
 
 if ($OpenClawConfig) {
   $setupArgs += @("--openclaw-config", $OpenClawConfig)

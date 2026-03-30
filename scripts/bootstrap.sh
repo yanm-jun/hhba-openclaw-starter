@@ -3,6 +3,7 @@ set -euo pipefail
 
 BASE_URL=""
 API_TOKEN=""
+DEPLOY_LINK=""
 OPENCLAW_CONFIG=""
 TELEGRAM_BOT_TOKEN=""
 INSTALL_DIR="${HOME}/.hhba-openclaw-starter"
@@ -15,6 +16,10 @@ while [[ $# -gt 0 ]]; do
       ;;
     --api-token)
       API_TOKEN="${2:-}"
+      shift 2
+      ;;
+    --deploy-link)
+      DEPLOY_LINK="${2:-}"
       shift 2
       ;;
     --openclaw-config)
@@ -36,8 +41,8 @@ while [[ $# -gt 0 ]]; do
   esac
 done
 
-if [[ -z "$BASE_URL" || -z "$API_TOKEN" ]]; then
-  echo "Usage: bootstrap.sh --base-url <HHBA_BASE_URL> --api-token <HHBA_API_TOKEN> [--openclaw-config <path>]" >&2
+if [[ -z "$DEPLOY_LINK" && ( -z "$BASE_URL" || -z "$API_TOKEN" ) ]]; then
+  echo "Usage: bootstrap.sh --deploy-link <HHBA_DEPLOY_LINK> OR --base-url <HHBA_BASE_URL> --api-token <HHBA_API_TOKEN> [--openclaw-config <path>]" >&2
   exit 1
 fi
 
@@ -60,9 +65,13 @@ mv "$TEMP_ROOT/hhba-openclaw-starter-main" "$INSTALL_DIR"
 PROJECT_ROOT="$INSTALL_DIR"
 cd "$PROJECT_ROOT"
 
-ARGS=(
-  run setup -- --base-url "$BASE_URL" --api-token "$API_TOKEN"
-)
+ARGS=(run setup --)
+
+if [[ -n "$DEPLOY_LINK" ]]; then
+  ARGS+=(--deploy-link "$DEPLOY_LINK")
+else
+  ARGS+=(--base-url "$BASE_URL" --api-token "$API_TOKEN")
+fi
 
 if [[ -n "$OPENCLAW_CONFIG" ]]; then
   ARGS+=(--openclaw-config "$OPENCLAW_CONFIG")

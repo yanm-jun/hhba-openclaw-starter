@@ -1,4 +1,4 @@
-import { definePluginEntry } from "./node_modules/openclaw/dist/plugin-sdk/plugin-entry.js";
+import { definePluginEntry } from "openclaw/plugin-sdk/plugin-entry";
 
 import { createHhbaApiClient } from "./hhba-client.js";
 

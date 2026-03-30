@@ -5,7 +5,7 @@
   "type": "module",
   "description": "OpenClaw plugin that exposes HHBA human-execution tools.",
   "dependencies": {
-    "openclaw": "^2026.3.22"
+    "openclaw": "^2026.3.28"
   },
   "openclaw": {
     "extensions": [

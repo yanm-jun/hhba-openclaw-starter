@@ -9,11 +9,14 @@ HHBA OpenClaw Setup
 
 Usage:
   npm run setup -- --base-url <HHBA_BASE_URL> --api-token <HHBA_API_TOKEN>
+  npm run setup -- --deploy-link <HHBA_DEPLOY_LINK>
   hhba-openclaw-setup --base-url <HHBA_BASE_URL> --api-token <HHBA_API_TOKEN>
+  hhba-openclaw-setup --deploy-link <HHBA_DEPLOY_LINK>
 
 Options:
   --base-url <url>           HHBA Task API base URL
   --api-token <token>        HHBA API bearer token
+  --deploy-link <url>        HHBA 一键部署链接，setup 会自动读取其中的密封配置
   --openclaw-config <path>   Absolute path to openclaw.json (overrides auto-discovery)
   --telegram-bot-token <v>   Optional Telegram bot token
   --skip-install             Skip npm install for the plugin folder
@@ -78,6 +81,57 @@ function parseEnvFile(filePath) {
   }
 
   return values;
+}
+
+async function readDeployLinkPayload(deployLink) {
+  const raw = String(deployLink || "").trim();
+  if (!raw) {
+    return null;
+  }
+
+  let requestUrl;
+  try {
+    requestUrl = new URL(raw);
+  } catch {
+    throw new Error("Invalid --deploy-link URL.");
+  }
+
+  requestUrl.searchParams.set("format", "json");
+  const response = await fetch(requestUrl, {
+    headers: {
+      Accept: "application/json"
+    }
+  });
+
+  if (!response.ok) {
+    throw new Error(`Failed to read deploy link payload: ${response.status} ${response.statusText}`);
+  }
+
+  let payload;
+  try {
+    payload = await response.json();
+  } catch {
+    throw new Error("Deploy link did not return valid JSON.");
+  }
+
+  const onboarding = payload?.onboarding && typeof payload.onboarding === "object"
+    ? payload.onboarding
+    : payload;
+
+  const baseUrl = String(onboarding?.baseUrl || "").trim();
+  const apiToken = String(onboarding?.apiToken || "").trim();
+
+  if (!baseUrl || !apiToken) {
+    throw new Error("Deploy link payload is missing baseUrl or apiToken.");
+  }
+
+  return {
+    baseUrl,
+    apiToken,
+    clientName: String(onboarding?.clientName || "").trim(),
+    clientSlug: String(onboarding?.clientSlug || "").trim(),
+    deployLink: raw
+  };
 }
 
 function updateEnvFile(filePath, updates) {
@@ -173,6 +227,10 @@ if (args.help) {
   process.exit(0);
 }
 
+const deployPayload = await readDeployLinkPayload(args["deploy-link"]);
+const resolvedBaseUrl = String(args["base-url"] || deployPayload?.baseUrl || "").trim();
+const resolvedApiToken = String(args["api-token"] || deployPayload?.apiToken || "").trim();
+
 const envFile = resolve(rootDir, ".env");
 const envExample = resolve(rootDir, ".env.example");
 
@@ -183,8 +241,8 @@ if (!existsSync(envFile)) {
 }
 
 const updates = {
-  HHBA_BASE_URL: args["base-url"],
-  HHBA_API_TOKEN: args["api-token"],
+  HHBA_BASE_URL: resolvedBaseUrl,
+  HHBA_API_TOKEN: resolvedApiToken,
   TELEGRAM_BOT_TOKEN: args["telegram-bot-token"],
   OPENCLAW_CONFIG_PATH: args["openclaw-config"]
 };
@@ -226,6 +284,9 @@ if (!args["no-merge"] && targetConfigPath) {
 console.log("");
 console.log("HHBA starter 已就绪。");
 console.log(`HHBA_BASE_URL: ${env.HHBA_BASE_URL || "未设置"}`);
+if (deployPayload) {
+  console.log(`部署链接: ${deployPayload.deployLink}`);
+}
 console.log(`配置输出: ${resolve(rootDir, "./generated/openclaw.hhba.config.jsonc")}`);
 
 if (merged) {
